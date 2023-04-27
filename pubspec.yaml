@@ -1,0 +1,73 @@
+name: wah_firebase
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  # add
+  # jiffy: ^6.1.0    # it make firebase error
+  image_picker: ^0.8.7+4
+  http: ^0.13.0
+  shared_preferences: ^2.0.3
+  firebase_core: ^2.10.0
+  firebase_storage: ^11.1.1
+  cloud_firestore: ^4.5.2
+  firebase_messaging: ^14.4.1
+  firebase_auth: ^4.4.2
+  awesome_dialog: ^3.0.2
+  dropdown_search: ^5.0.6
+  # cause problems
+  # firebase_auth_web: 
+  # firebase_core_web: ^3.0.0
+  # to use google 
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.8
+  flutter_signin_button: ^2.0.0
+  # github_sign_in: ^0.0.4
+  github_signin_promax: ^0.0.7+2
+
+dev_dependencies:
+  # add
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.2.19
+  flutter_test:
+    sdk: flutter
+# icons
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/logo.png"
+
+# splash
+flutter_native_splash:
+  color: "#42a5f5"
+  image: images/splash.png
+  android_gravity: fill
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/
+    - assets/images/
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #

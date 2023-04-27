@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>329558651885-9vb49898s2m5g2dt8qqbc9200i0in27r.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.329558651885-9vb49898s2m5g2dt8qqbc9200i0in27r</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAHHoO2O6eX8cOCWJMzY4gfCeN5bE3aaQo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>329558651885</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.wahFirebase</string>
+	<key>PROJECT_ID</key>
+	<string>ecommerce-tarek</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ecommerce-tarek.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:329558651885:ios:fbd86cb507b947fd0bade4</string>
+</dict>
+</plist>
