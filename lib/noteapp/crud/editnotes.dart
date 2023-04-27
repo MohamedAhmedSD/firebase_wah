@@ -123,17 +123,31 @@ class _EditNotesState extends State<EditNotes> {
                   onPressed: () {
                     showBottomSheet(context);
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.pink,
+                    backgroundColor: Colors.pink,
+                    iconColor: Colors.pink,
+                  ),
                   // textColor: Colors.white,
-                  child: Text("Edit Image For Note"),
+                  child: Text(
+                    "Edit Image For Note",
+                    style: TextStyle(color: Colors.amber),
+                  ),
                 ),
                 TextButton(
                   onPressed: () async {
                     await editNotes(context);
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.pink,
+                    backgroundColor: Colors.pink,
+                    iconColor: Colors.pink,
+                  ),
                   // textColor: Colors.white,
                   // padding: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 10),
                     child: Text(
                       "Edit Note",
                       style: Theme.of(context).textTheme.titleLarge,

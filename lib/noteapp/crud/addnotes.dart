@@ -113,13 +113,26 @@ class _AddNotesState extends State<AddNotes> {
                   onPressed: () {
                     showBottomSheet(context);
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.pink,
+                    backgroundColor: Colors.pink,
+                    iconColor: Colors.pink,
+                  ),
                   // textColor: Colors.white,
-                  child: Text("Add Image For Note"),
+                  child: Text(
+                    "Add Image For Note",
+                    style: TextStyle(color: Colors.amber),
+                  ),
                 ),
                 TextButton(
                   onPressed: () async {
                     await addNotes(context);
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.pink,
+                    backgroundColor: Colors.pink,
+                    iconColor: Colors.pink,
+                  ),
                   // textColor: Colors.white,
                   // padding: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
                   child: Padding(
