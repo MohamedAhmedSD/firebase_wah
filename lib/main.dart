@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wah_firebase/firebase_options.dart';
+import 'package:wah_firebase/firestore_/filter.dart';
 
 import 'noteapp/auth/login.dart';
 import 'noteapp/auth/signup.dart';
@@ -64,7 +65,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: islogin == false ? Login() : HomePage(),
-      home: Login(),
+      // home: AddUser("mohamed", "sheikh", 22),
+      home: Filter(),
+
       // home: Test(),
       theme: ThemeData(
           // fontFamily: "NotoSerif",
