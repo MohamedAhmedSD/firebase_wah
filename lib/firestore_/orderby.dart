@@ -1,52 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class Filter extends StatefulWidget {
+class OrderAndOthers extends StatefulWidget {
   @override
-  _FilterState createState() => _FilterState();
+  _OrderAndOthersState createState() => _OrderAndOthersState();
 }
 
 //* read => https://firebase.flutter.dev/docs/firestore/usage/
-class _FilterState extends State<Filter> {
+
+class _OrderAndOthersState extends State<OrderAndOthers> {
 //? ==================== call certain collection data  =============
   getData() async {
     //* collection
-    FirebaseFirestore.instance.collection("users_").snapshots().listen((event) {
-      event.docs.forEach((element) {
-        print("${element.data()["age"]}");
-      });
-    });
-    //* get
-    //! get == Future == need await
-  }
-
-//? ========== filter 1 => String ================
-//* ============= where it come before get ================
-//* as getDate + where stmt =================================
-/**
- * Query<Object?> where(
-  Object field, {
-  Object? isEqualTo,
-  Object? isNotEqualTo,
-  Object? isLessThan,
-  Object? isLessThanOrEqualTo,
-  Object? isGreaterThan,
-  Object? isGreaterThanOrEqualTo,
-  Object? arrayContains,
-  Iterable<Object?>? arrayContainsAny,
-  Iterable<Object?>? whereIn,
-  Iterable<Object?>? whereNotIn,
-  bool? isNull,
-})
- */
-  filterDataString() async {
-    //* collection
     CollectionReference userref =
         FirebaseFirestore.instance.collection("users_");
     //* get
     //! get == Future == need await
 
-    await userref.where("company", isEqualTo: "sheikh").get().then((value) => {
+    await userref.get().then((value) => {
           value.docs.forEach((element) {
             print(element.data());
             print("========================");
@@ -54,27 +25,51 @@ class _FilterState extends State<Filter> {
         });
   }
 
-//? ========== filter 2 => numbers ================
+//! ================== we need call doc inside collection =======
+//? ========== Orderby , desending ================
 
-  filterDataNumber() async {
+  orderBy() async {
     //* collection
-    CollectionReference userref =
+    CollectionReference? userref =
         FirebaseFirestore.instance.collection("users_");
     //* get
     //! get == Future == need await
+    //* orderBy(Object field, {bool descending = false})
 
-    await userref.where("age", isLessThanOrEqualTo: 35).get().then((value) => {
+    await userref.orderBy("age", descending: false).get().then((value) => {
           value.docs.forEach((element) {
             print(element.data());
+            // print(element.data()["age"]);
+            // print(element.data()["lang"]);
             print("========================");
           })
         });
   }
 
-//? ========== filter 3 => MultiValues ================
-//* =========== whereIn [] / whereNotIn [] ============
+  //? ========== from chatgpt ========================
+  // void orderBy() async {
+  //   //* collection
+  //   CollectionReference? userref =
+  //       FirebaseFirestore.instance.collection("users_");
+  //   //* get
+  //   //! get == Future == need await
+  //   //* orderBy(Object field, {bool descending = false})
 
-  filterMultiValues() async {
+  //   QuerySnapshot querySnapshot = await userref.get();
+  //   if (querySnapshot.docs.isNotEmpty) {
+  //     for (var e in querySnapshot.docs
+  //         .map((e) => (e) {
+  //               print(e);
+  //             })
+  //         .toList()) {
+  //       print(e.toString());
+  //     }
+  //   }
+  // }
+//? ========== Order and limit ================
+//* ========== [A] Order and limit  =<  ================
+
+  orderAndLimit() async {
     //* collection
     CollectionReference userref =
         FirebaseFirestore.instance.collection("users_");
@@ -82,7 +77,8 @@ class _FilterState extends State<Filter> {
     //! get == Future == need await
 
     await userref
-        .where("age", whereIn: [22, 20, 40, 33])
+        .orderBy("age", descending: true)
+        .limit(2)
         .get()
         .then((value) => {
               value.docs.forEach((element) {
@@ -92,25 +88,8 @@ class _FilterState extends State<Filter> {
             });
   }
 
-  //? ========== filter 4 => array ================
-//* =========== arrayContains => String /arrayContainAny => array ============
-  filterArrayContains() async {
-    //* collection
-    CollectionReference userref =
-        FirebaseFirestore.instance.collection("users_");
-    //* get
-    //! get == Future == need await
-
-    await userref.where("lang", arrayContains: "fr").get().then((value) => {
-          value.docs.forEach((element) {
-            print(element.data());
-            print("========================");
-          })
-        });
-  }
-
-  //*=======================
-  filterArrayContainAny() async {
+  //* ========== [B] Order and limitToLast < ================
+  orderAndLimitToLast() async {
     //* collection
     CollectionReference userref =
         FirebaseFirestore.instance.collection("users_");
@@ -118,7 +97,8 @@ class _FilterState extends State<Filter> {
     //! get == Future == need await
 
     await userref
-        .where("lang", arrayContainsAny: ["ar", "gr"])
+        .orderBy("age", descending: true)
+        .limitToLast(2)
         .get()
         .then((value) => {
               value.docs.forEach((element) {
@@ -128,23 +108,19 @@ class _FilterState extends State<Filter> {
             });
   }
 
-  //? ========== filter 5 => multi fields ================
-  filterMultiFields() async {
+//? ========== Order and startAt ================
+//* ========== [A] Order and startAt >=   ================
+
+  orderAndStartAt() async {
     //* collection
     CollectionReference userref =
         FirebaseFirestore.instance.collection("users_");
     //* get
     //! get == Future == need await
-
-    //* ==== where().where().get().... =======================
-    //* it give error =>>>>>>>>>>>>>> need idexed ============
-    //! manually from cloude FS or from http link on error message
-    //? copy http link to end without , =======================
-    //* ========= index take time => hot restart ==========================
-
+    //! ============= use [] ================== 20 and more
     await userref
-        .where("lang", arrayContainsAny: ["ar", "gr"])
-        .where("age", isGreaterThan: 15)
+        .orderBy("age", descending: true)
+        .startAt([20])
         .get()
         .then((value) => {
               value.docs.forEach((element) {
@@ -154,11 +130,75 @@ class _FilterState extends State<Filter> {
             });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getData();
+//* ========== [B] Order and startAfter  > ================
+
+  orderAndStartAfter() async {
+    //* collection
+    CollectionReference userref =
+        FirebaseFirestore.instance.collection("users_");
+    //* get
+    //! get == Future == need await
+    //! ============= use [] ================== 21
+    await userref
+        .orderBy("age", descending: false)
+        .startAfter([20])
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) {
+                print(element.data());
+                print("========================");
+              })
+            });
   }
+
+//? ========== Order and endAt ================
+//* ========== [A] Order and EndAt =<   ================
+
+  orderAndEndAt() async {
+    //* collection
+    CollectionReference userref =
+        FirebaseFirestore.instance.collection("users_");
+    //* get
+    //! get == Future == need await
+    //! ============= use [] ================== 20 and more
+    await userref
+        .orderBy("age", descending: false)
+        .endAt([20])
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) {
+                print(element.data());
+                print("========================");
+              })
+            });
+  }
+
+//* ========== [B] Order and EndBefore  < ================
+
+  orderAndEndBefore() async {
+    //* collection
+    CollectionReference userref =
+        FirebaseFirestore.instance.collection("users_");
+    //* get
+    //! get == Future == need await
+    //! ============= use [] ================== 21
+    await userref
+        .orderBy("age", descending: true)
+        .endBefore([20])
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) {
+                print(element.data());
+                print("========================");
+              })
+            });
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getData();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,62 +218,74 @@ class _FilterState extends State<Filter> {
                 child: Text("get data of users_"),
               ),
             ),
+            //? ========== order ================
             Center(
               child: ElevatedButton(
                 onPressed: () {
                   //! not need to async & await
-                  filterDataNumber();
+                  orderBy();
                 },
-                child: Text("filter data of users_ age < 35"),
+                child: Text("Orderby , desending"),
+              ),
+            ),
+
+            //? ========== order and limit ================
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  //! not need to async & await
+                  orderAndLimit();
+                },
+                child: Text("orderAndLimit"),
+              ),
+            ),
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  //! not need to async & await
+                  orderAndLimitToLast();
+                },
+                child: Text("orderAndLimitToLast"),
+              ),
+            ),
+            //? ========== Order and startAt ================
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  //! not need to async & await
+                  orderAndStartAt();
+                },
+                child: Text("orderAndStartAt"),
               ),
             ),
             Center(
               child: ElevatedButton(
                 onPressed: () {
                   //! not need to async & await
-                  filterDataString();
+                  orderAndStartAfter();
                 },
-                child: Text("filter data of users_ company == sheikh"),
+                child: Text("orderAndStartAfter"),
               ),
             ),
-            //? ============= multibleValues ========
+//? ========== Order and endAt ================
             Center(
               child: ElevatedButton(
                 onPressed: () {
                   //! not need to async & await
-                  filterMultiValues();
+                  orderAndEndAt();
                 },
-                child: Text("filter data of users_ age == 22,20,40,33"),
+                child: Text("orderAndEndAt"),
               ),
             ),
-            //? ============= array contains ========
             Center(
               child: ElevatedButton(
                 onPressed: () {
                   //! not need to async & await
-                  filterArrayContains();
+                  orderAndEndBefore();
                 },
-                child: Text("filter data of users_ lang == fr"),
-              ),
-            ),
-            //? ============= array contain any ========
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  //! not need to async & await
-                  filterArrayContainAny();
-                },
-                child: Text("filter data of users_ lang == ar,gr & age > 22"),
-              ),
-            ),
-            //? ============= multi fields ========
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  //! not need to async & await
-                  filterMultiFields();
-                },
-                child: Text("filter data of users_ lang == ar or gr, age > 15"),
+                child: Text("orderAndEndBefore"),
               ),
             ),
           ],

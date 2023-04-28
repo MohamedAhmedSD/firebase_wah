@@ -3,8 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wah_firebase/firebase_options.dart';
-import 'package:wah_firebase/firestore_/filter.dart';
 
+import 'firestore_/snap.dart';
 import 'noteapp/auth/login.dart';
 import 'noteapp/auth/signup.dart';
 import 'noteapp/crud/addnotes.dart';
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: islogin == false ? Login() : HomePage(),
       // home: AddUser("mohamed", "sheikh", 22),
-      home: Filter(),
+      home: Snap(),
 
       // home: Test(),
       theme: ThemeData(
