@@ -12,7 +12,7 @@ class _TestState extends State<Test> {
 //! get == Future == need await
 
   getDataOfCollectionShortWay() {
-    //! [1] sjort way
+    //! [1] short way
     var userref = FirebaseFirestore.instance
         .collection("users_") // CollectionReference
         .get() // QuerySnapshot

@@ -9,13 +9,19 @@ class Verify extends StatefulWidget {
 
 class _VerifyState extends State<Verify> {
   //! solve error when not make it late here we cann't access it for verify ====
+
+  //? A UserCredential is returned from authentication requests such as
+  //*[createUserWithEmailAndPassword].
+
   late UserCredential? userCredential;
 
   void verifyEmail() {
     User? user = FirebaseAuth.instance.currentUser;
-    //Check if user is not verified
+    //* ========  Check if user is not verified  =============
+    //! Returns whether the users email address has been verified.
+    //* !false => true
     if (!(user!.emailVerified)) {
-      user.sendEmailVerification();
+      user.sendEmailVerification(); //! Sends a verification email to a user.
       print(user.emailVerified);
     }
   }
@@ -44,8 +50,7 @@ class _VerifyState extends State<Verify> {
   }
 }
 
-
-//?  =============== notes ===============
+//?  =============== [ default code ] ===============
 /**
 Send a user a verification email#
 You can send an address verification email to a user with the 

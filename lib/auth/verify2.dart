@@ -9,7 +9,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int opt = 0;
+  int opt = 0; //* number of accounts regesterd
 
   @override
   void initState() {
@@ -18,7 +18,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void registerAccount() {
-    if(opt == 0) {
+    //! no account add once, regester
+    //! if there sign in
+    if (opt == 0) {
       FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: 'btoox8python@gmail.com',
         password: 'password',
@@ -31,10 +33,11 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  //! why we not use here =>   late UserCredential? userCredential;
   void verifyEmail() {
     User? user = FirebaseAuth.instance.currentUser;
     //Check if user is not verified
-    if(!(user!.emailVerified)) {
+    if (!(user!.emailVerified)) {
       user.sendEmailVerification();
     }
   }
@@ -42,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
   void sendResetPassword() {
     User? user = FirebaseAuth.instance.currentUser;
     FirebaseAuth.instance.sendPasswordResetEmail(
-      email: user!.email.toString(),
+      email: user!.email.toString(), //! email => String
     );
   }
 
@@ -55,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            //? ===== [Verify Email] =====
             GestureDetector(
               onTap: () {
                 verifyEmail();
@@ -71,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
+            //? ===== [Reset Password] =====
             GestureDetector(
               onTap: () {
                 sendResetPassword();

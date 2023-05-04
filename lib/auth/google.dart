@@ -6,8 +6,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 //*  'vepromiseToFuture'.
 //! solve it by remove both firebase auth and core webs then =?
 //! flutter clean => flutter pub get
+//?=============================
 
-//* why after sign in I can't see it on users on FB but see it on my phone?
+//* why after sign in I can't see it on users on FB but see it on my phone? ===
 
 class Google extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class Google extends StatefulWidget {
 class _GoogleState extends State<Google> {
   //? ============ method =======================================
   Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
+    //? Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     //* get user information
@@ -26,7 +27,7 @@ class _GoogleState extends State<Google> {
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
-    // Create a new credential
+    //! Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
@@ -50,8 +51,8 @@ class _GoogleState extends State<Google> {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  UserCredential crud = await signInWithGoogle();
-                  print(crud);
+                  UserCredential cred = await signInWithGoogle();
+                  print(cred);
                 },
                 child: Text("google sign in"),
               ),
@@ -62,7 +63,7 @@ class _GoogleState extends State<Google> {
 }
 
 
-//?  =============== notes ===============
+//?  =============== [ default code ] ===============
 /**
 import 'package:google_sign_in/google_sign_in.dart';
 

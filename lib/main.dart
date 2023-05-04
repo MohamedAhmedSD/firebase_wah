@@ -3,8 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wah_firebase/firebase_options.dart';
+import 'package:wah_firebase/storage/mystorage.dart';
 
-import 'firestore_/snap.dart';
 import 'noteapp/auth/login.dart';
 import 'noteapp/auth/signup.dart';
 import 'noteapp/crud/addnotes.dart';
@@ -23,16 +23,21 @@ import 'noteapp/testtwo.dart';
 //* Enabling Multidex, after modify sdks => multiDexEnabled true
 //! and its implementaion on depencies
 
-//* read how uconnect with web == index.html
+//* read how connect with web == index.html => start point
 
 //* why we use firebase core ?
 //? it connect our app to firebase services
 
-//? =========================
+//! =========== [ why they are global ?? bad or not ] ==================
 bool? islogin;
+
+//* RemoteMessage => A class representing a message sent from Firebase Cloud Messaging.
 
 Future backgroudMessage(RemoteMessage message) async {
   print("=================== BackGroud Message ========================");
+
+  //! Additional Notification data sent with the message.
+  //* body => The notification body content.
   print("${message.notification!.body}");
 }
 
@@ -44,9 +49,10 @@ Future<void> main() async {
       // options: DefaultFirebaseOptions.currentPlatform,
       options: DefaultFirebaseOptions.android);
 
-  //? =========
+  //? ========= call RemoteMessage =============
   FirebaseMessaging.onBackgroundMessage(backgroudMessage);
 
+  //? ======== get the CURRENTUSER by AUTH =======
   var user = FirebaseAuth.instance.currentUser;
   if (user == null) {
     islogin = false;
@@ -59,24 +65,27 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      //* ===== allow user enter to homepage if he already regester ====
       // home: islogin == false ? Login() : HomePage(),
+      //* test AddUser function with dump data
       // home: AddUser("mohamed", "sheikh", 22),
-      home: Snap(),
+      home: MyStorage(),
 
       // home: Test(),
       theme: ThemeData(
-          // fontFamily: "NotoSerif",
-          primaryColor: Colors.blue,
-          textTheme: TextTheme(
-            titleLarge: TextStyle(fontSize: 20, color: Colors.white),
-            headlineSmall: TextStyle(fontSize: 30, color: Colors.blue),
-            bodyMedium: TextStyle(fontSize: 20, color: Colors.black),
-          )),
+        // fontFamily: "NotoSerif",
+        primaryColor: Colors.blue,
+        textTheme: TextTheme(
+          titleLarge: TextStyle(fontSize: 20, color: Colors.white),
+          headlineSmall: TextStyle(fontSize: 30, color: Colors.blue),
+          bodyMedium: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+      ),
+      //? we make our routes with out /
       routes: {
         "login": (context) => Login(),
         "signup": (context) => SignUp(),

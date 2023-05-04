@@ -64,7 +64,7 @@
 //   }
 // }
 
-// //?  =============== notes ===============
+//?  =============== [ default code ] ===============
 // /**
 // import 'package:github_sign_in/github_sign_in.dart';
 

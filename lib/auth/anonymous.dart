@@ -5,7 +5,7 @@ class Anonymous extends StatefulWidget {
   @override
   _AnonymousState createState() => _AnonymousState();
 }
-//! jiffy packages have pt\roblem with firebase
+//! jiffy packages have problem with firebase ===================
 //? read => https://firebase.flutter.dev/docs/auth/anonymous-auth
 
 class _AnonymousState extends State<Anonymous> {
@@ -27,7 +27,8 @@ class _AnonymousState extends State<Anonymous> {
                       await FirebaseAuth.instance.signInAnonymously();
                   print(userCredential);
                   print("=====================================");
-                  print(userCredential.user!.uid); //! VIP
+                  print(userCredential
+                      .user!.uid); //! uid => The user's unique ID.
                   print("=====================================");
                   print("Signed in with temporary account.");
                   print("=====================================");
@@ -36,7 +37,7 @@ class _AnonymousState extends State<Anonymous> {
                     case "operation-not-allowed":
                       print(
                           "Anonymous auth hasn't been enabled for this project.");
-                      break;
+                      break; //! ========= don't forget break after this case ==
                     default:
                       print("Unknown error.");
                   }
@@ -50,7 +51,7 @@ class _AnonymousState extends State<Anonymous> {
 }
 
 
-//?  =============== notes ===============
+//?  =============== [ default code ] ===============
 /**
  * try {
   final userCredential =

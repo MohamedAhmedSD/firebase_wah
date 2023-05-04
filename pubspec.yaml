@@ -31,6 +31,7 @@ dependencies:
   flutter_signin_button: ^2.0.0
   # github_sign_in: ^0.0.4
   github_signin_promax: ^0.0.7+2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   # add
@@ -50,6 +51,11 @@ flutter_native_splash:
   image: images/splash.png
   android_gravity: fill
   flutter_lints: ^2.0.0
+# camera
+  camera: ^0.10.4
+  path_provider: ^2.0.14
+  path: ^1.8.3
+  permission_handler: ^10.2.0
 
 flutter:
 

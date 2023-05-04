@@ -43,11 +43,14 @@ class _TestState extends State<EmailAndPassword> {
                   // print("=====================================");
                   // print(credential.credential!.signInMethod.toString());
                 } on FirebaseAuthException catch (e) {
+                  //? == why not use break ?? may due to we not use switch ==
+
                   if (e.code == 'weak-password') {
                     print('The password provided is too weak.');
                   } else if (e.code == 'email-already-in-use') {
                     print('The account already exists for that email.');
                   }
+                  //? ==== can get all other e.code errors ?? ===============
                 } catch (e) {
                   print(e);
                 }
@@ -95,8 +98,9 @@ class _TestState extends State<EmailAndPassword> {
 }
 
 
-//?  =============== notes ===============
+//?  =============== [ default code ] ===============
 /**
+ //! => REGISTER
 try {
   final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
     email: emailAddress,
@@ -112,6 +116,7 @@ try {
  */
 
 /**
+ //! => LOGIN
  * try {
   final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
     email: emailAddress,
