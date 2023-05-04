@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,7 +40,25 @@ class _MyStorageState extends State<MyStorage> {
         var imgName = basename(imgPicked.path); //* basename from => path lib
         print(imgName);
 
+        //? == avoid repeat img name by using random number before it
+        var random = Random().nextInt(10000000);
+        //* assign it to start of img name => new name
+        imgName = "$random$imgName";
+        print(imgName);
+
         //! ========= how upload it to Storage ==========
+        //* 1. make folder and inside it your img name
+        //? If the [path] is empty, the reference will point to the root of the storage bucket.
+        var refstorage = FirebaseStorage.instance.ref("images/$imgName");
+        //? we can use child to divide our long path
+        // var refstorage = FirebaseStorage.instance.ref("images").child("part1").child("$imgName");
+
+        //* 2. Upload a [File] from the filesystem. The file must exist.
+        await refstorage.putFile(file!);
+
+        //* 3. to get link where our img upload on FB.Storage
+        var url = refstorage.getDownloadURL();
+        print('url: $url');
 
         //!==============================================
       } else {
