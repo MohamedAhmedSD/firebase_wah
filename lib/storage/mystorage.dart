@@ -73,6 +73,56 @@ class _MyStorageState extends State<MyStorage> {
     // }
   }
 
+//! === [ list => can determain its itemes number , listtAll => may reach to million]
+//* use listOptions =======
+
+  getImagesAndFolderName() async {
+    //* [A] from root
+    //* list here back future
+
+    //
+    var ref =
+        await FirebaseStorage.instance.ref().list(ListOptions(maxResults: 2));
+    // access its items
+    //* [1] back files name
+    ref.items.forEach((element) {
+      print("==================");
+      print(element.name);
+    });
+
+    //! items or prefixes
+
+    //* [2] back folder name
+    ref.prefixes.forEach((element) {
+      print("==================");
+      print(element.name);
+    });
+  }
+
+  getImagesFromImagesFolder() async {
+    //* [A] from certain folder
+    // list here back future
+    var ref = await FirebaseStorage.instance.ref("images").listAll();
+    // access its items
+    ref.items.forEach((element) {
+      print("==================");
+      print(element.name);
+    });
+
+    //* [2] back folder name
+    ref.prefixes.forEach((element) {
+      print("==================");
+      print(element.name);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getImagesAndFolderName();
+    getImagesFromImagesFolder();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
