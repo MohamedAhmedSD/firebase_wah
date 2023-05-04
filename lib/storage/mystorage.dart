@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -31,16 +31,26 @@ class _MyStorageState extends State<MyStorage> {
       if (imgPicked != null) {
         file = File(imgPicked.path);
         print('===================');
-        print(imgPicked.path);
+        print(imgPicked.path); //! full path
+        print('===================');
+
+        //* ===== only img name ==============
+        var imgName = basename(imgPicked.path); //* basename from => path lib
+        print(imgName);
+
+        //! ========= how upload it to Storage ==========
+
+        //!==============================================
       } else {
         print("Please choose Image");
       }
       //! Hint: upload the image to Firebase Storage
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Please grant access to the camera.'),
-      ));
     }
+    // else {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     content: Text('Please grant access to the camera.'),
+    //   ));
+    // }
   }
 
   @override
