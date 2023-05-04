@@ -23,7 +23,8 @@ class _FourthWayState extends State<FourthWay> {
         title: Text('Data by Future.Builder'),
       ),
       body: StreamBuilder(
-          //? snapshot()  not snapshpt
+          //* snapshot()  not snapshpt
+          //? use snapshot() rather than get()
           stream: noteref.snapshots(), //! Stream<QuerySnapshot<>
 
           //* builder => context + snapshot

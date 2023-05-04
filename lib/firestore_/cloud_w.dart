@@ -50,6 +50,7 @@ class _TestState extends State<Test> {
     DocumentReference doc =
         FirebaseFirestore.instance.collection("users").doc("123");
     //! get == Future == need await
+    //* no need tp foreach to loop==
     await doc.get().then(
         (value) => {print(value.exists), print(value.id), print(value.data())});
   }

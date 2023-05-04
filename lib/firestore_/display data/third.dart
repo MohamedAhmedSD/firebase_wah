@@ -12,7 +12,8 @@ class ThirdWay extends StatefulWidget {
 //* no list, no init need
 
 //* doc access => then call on our FB widget
-DocumentReference userref = FirebaseFirestore.instance.collection("users_").doc("6ZfHkphjkdiSJE99NNCl");
+DocumentReference docref =
+    FirebaseFirestore.instance.collection("users_").doc("6ZfHkphjkdiSJE99NNCl");
 
 class _ThirdWayState extends State<ThirdWay> {
   @override
@@ -22,23 +23,23 @@ class _ThirdWayState extends State<ThirdWay> {
         title: Text('Data by Future.Builder'),
       ),
       body: FutureBuilder(
-          future: userref.get(), //!  userref.get() == future======
+          future: docref.get(), //!  docref.get() == future======
           //* builder => context + snapshot
           //? snapshot == which save and store data that back to me ======
           builder: (context, snapshot) {
             //* always check is there data or not first =======
             if (snapshot.hasData) {
-                  //?========== delete docs ========
-                  if (snapshot.hasData && snapshot.data != null) {
-                          Map<String, dynamic> data = snapshot.data!
-                              .data() as Map<String, dynamic>;
-                          //* now we can use data == Map<String, dynamic> to
-                          //* reach our fields values ===================
+              //?========== delete docs ========
+              if (snapshot.hasData && snapshot.data != null) {
+                Map<String, dynamic> data =
+                    snapshot.data!.data() as Map<String, dynamic>;
+                //* now we can use data == Map<String, dynamic> to
+                //* reach our fields values ===================
 
-                          return Text("${data['age']}");
-                        } else {
-                          return Text("Loading");
-                        }
+                return Text("${data['age']}");
+              } else {
+                return Text("Loading");
+              }
             }
             if (snapshot.hasError) {
               return Text("Error");
@@ -51,8 +52,6 @@ class _ThirdWayState extends State<ThirdWay> {
 
             return Text("Loading");
           }),
-
     );
   }
 }
-

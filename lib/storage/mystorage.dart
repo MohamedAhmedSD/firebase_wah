@@ -9,6 +9,10 @@ class MyStorage extends StatefulWidget {
   _MyStorageState createState() => _MyStorageState();
 }
 
+//! ============ we use Storage to deal with files && images ===============
+//* Sometimes Camera not work on your emulator, so test them on others or in
+//* your physical phone
+
 class _MyStorageState extends State<MyStorage> {
   //? ==== image picker, need File path ===========
   File? file; //* as dart:io => input/output not math
@@ -23,7 +27,15 @@ class _MyStorageState extends State<MyStorage> {
     }
     if (status.isGranted) {
       var imgPicked = await imagePicker.pickImage(source: ImageSource.camera);
-      // Hint: upload the image to Firebase Storage
+      //
+      if (imgPicked != null) {
+        file = File(imgPicked.path);
+        print('===================');
+        print(imgPicked.path);
+      } else {
+        print("Please choose Image");
+      }
+      //! Hint: upload the image to Firebase Storage
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Please grant access to the camera.'),

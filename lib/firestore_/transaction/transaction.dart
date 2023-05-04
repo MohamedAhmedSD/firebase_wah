@@ -24,17 +24,17 @@ class _TransactionState extends State<Transaction> {
 
     //* call transaction
     FirebaseFirestore.instance.runTransaction((transaction) async {
-      //  start
+      //?  start
 
-      // DocumentSnapshot docsnap = await transaction.get(documentReference);
+      //* DocumentSnapshot docsnap = await transaction.get(documentReference);
       DocumentSnapshot docsnap = await transaction.get(docref);
 
-      //  should use conditional before deal with CRUD to handle errors
+      //*  should use conditional before deal with CRUD to handle errors
       if (docsnap.exists) {
         // transaction.update(documentReference, data);
         transaction.update(docref, {"phone": 23456});
       }
-      // end
+      //? end
     });
   }
 

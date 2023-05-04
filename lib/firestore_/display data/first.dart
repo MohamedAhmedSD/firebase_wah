@@ -20,16 +20,16 @@ class _FirstWayState extends State<FirstWay> {
   DocumentReference docref = FirebaseFirestore.instance.collection("users_").doc(
       "GoTbbtFbHK3CO4hFG5fQ"); //! some times we need change doc id test another
 
-  //? method to getData =================================================
+  //? ======= method to getData from collection => get() ===================
   getData() async {
     //* save data that we get on var == responsebody
     var responsebody = await userref.get();
 
     //* we need docs, docs == List<QueryDocumentSnapshot<Object?>>
     // responsebody.docs;
-    //* loop through them, then add its element on our empty list
+    //* loop through them, then add its element on our =>[ empty list ]
     responsebody.docs.forEach((element) {
-      //? ========== we put them inside setState, to see them on UI=============
+      //! ========== we put them inside setState, to see them on UI=============
       setState(() {
         // users.add(element);  //! not this
         users.add(element.data()); //* need .data()  == data == all fields
@@ -39,10 +39,11 @@ class _FirstWayState extends State<FirstWay> {
     print(users);
   }
 
-//? method to getData =================================================
+//?======= method to getData from certain doc => get() ===================
   getDocData() async {
     //* save data that we get on var == responsebody == DocumentSnapshot
     var responsebody = await docref.get();
+    //! we don't need to use forEach =========================================
     //* display them on UI
     setState(() {
       //* add our DocumentSnapshot to list => users
@@ -67,6 +68,7 @@ class _FirstWayState extends State<FirstWay> {
           title: Text('data by ListView.Builder'),
         ),
         //! ===== we use our list == users alot =============
+        //* access as orinary list by its index ==
         body: Column(
           children: [
             //? =============== collecrion ===========================

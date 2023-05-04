@@ -9,7 +9,7 @@ class SecondWay extends StatefulWidget {
 }
 
 //! === when use FutureBuilder no need to? ==========
-//* no list, no init need
+//* no list, no init need ==========================
 
 //* collection access => then call on our FB widget
 CollectionReference userref = FirebaseFirestore.instance.collection("users_");
@@ -25,6 +25,7 @@ class _SecondWayState extends State<SecondWay> {
           future: userref.get(), //!  userref.get() == future======
           //* builder => context + snapshot
           //? snapshot == which save and store data that back to me ======
+          //* get == back => QuerySnapshot
           builder: (context, snapshot) {
             //* always check is there data or not first =======
             if (snapshot.hasData) {
@@ -102,7 +103,8 @@ class _SecondWayState extends State<SecondWay> {
 }
 
 /**
- * Sure! This error occurs when you try to assign a value of type `Object?` to a variable of type `Map<String, dynamic>`. 
+ * Sure! This error occurs when you try to assign a value of type `Object?` 
+ * to a variable of type `Map<String, dynamic>`. 
 
 Here's an example of how this error might occur:
 
@@ -116,9 +118,15 @@ void fetchData() async {
 }
 ```
 
-In this code, we have defined a `data` variable of type `Map<String, dynamic>` and a `fetchData` function that fetches some data from an API and assigns it to the `data` variable. However, the `decodedResponse` value obtained from decoding the response body is of type `Object?`. 
+In this code, we have defined a `data` variable of type `Map<String, dynamic>` 
+and a `fetchData` function that fetches some data from an API and assigns 
+it to the `data` variable. However, 
+the `decodedResponse` value obtained from decoding the response body 
+is of type `Object?`. 
 
-To fix this error, we can either change the type of the `data` variable to `dynamic` (which can hold any type of value), or cast the `decodedResponse` value to the required type:
+To fix this error, we can either change the type of the `data` 
+variable to `dynamic` (which can hold any type of value), 
+or cast the `decodedResponse` value to the required type:
 
 ```
 Map<String, dynamic> data;
@@ -130,7 +138,8 @@ void fetchData() async {
 }
 ```
 
-In this updated code, we have cast the `decodedResponse` value as `Map<String, dynamic>` so that it can be assigned to the `data` variable of that type.
+In this updated code, we have cast the `decodedResponse` value as 
+`Map<String, dynamic>` so that it can be assigned to the `data` variable of that type.
 
 I hope this helps!
  */
