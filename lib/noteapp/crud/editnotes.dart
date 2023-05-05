@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../component/alert.dart';
 
 class EditNotes extends StatefulWidget {
+  //* it need both
   final docid;
   final list;
   EditNotes({Key? key, this.docid, this.list}) : super(key: key);
@@ -35,6 +36,9 @@ class _EditNotesState extends State<EditNotes> {
       if (formdata!.validate()) {
         showLoading(context);
         formdata.save();
+        //! we need access certain doc id
+        //? then update its data
+        //* may use set rather than update
         await notesref.doc(widget.docid).update({
           "title": title,
           "note": note,
@@ -45,6 +49,7 @@ class _EditNotesState extends State<EditNotes> {
         });
       }
     } else {
+      //! if null add new one by using => doc.update
       if (formdata!.validate()) {
         showLoading(context);
         formdata.save();
@@ -73,88 +78,93 @@ class _EditNotesState extends State<EditNotes> {
           child: Column(
         children: [
           Form(
-              key: formstate,
-              child: Column(children: [
-                TextFormField(
-                  initialValue: widget.list['title'],
-                  validator: (val) {
-                    if (val!.length > 30) {
-                      return "Title can't to be larger than 30 letter";
-                    }
-                    if (val.length < 2) {
-                      return "Title can't to be less than 2 letter";
-                    }
-                    return null;
-                  },
-                  onSaved: (val) {
-                    title = val;
-                  },
-                  maxLength: 30,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: "Title Note",
-                      prefixIcon: Icon(Icons.note)),
+            key: formstate,
+            child: Column(children: [
+              //?======== title ===============
+              TextFormField(
+                initialValue: widget.list['title'],
+                validator: (val) {
+                  if (val!.length > 30) {
+                    return "Title can't to be larger than 30 letter";
+                  }
+                  if (val.length < 2) {
+                    return "Title can't to be less than 2 letter";
+                  }
+                  return null;
+                },
+                onSaved: (val) {
+                  title = val;
+                },
+                maxLength: 30,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Title Note",
+                    prefixIcon: Icon(Icons.note)),
+              ),
+              //?======== note ===============
+              TextFormField(
+                initialValue: widget.list['note'],
+                validator: (val) {
+                  if (val!.length > 255) {
+                    return "Notes can't to be larger than 255 letter";
+                  }
+                  if (val.length < 10) {
+                    return "Notes can't to be less than 10 letter";
+                  }
+                  return null;
+                },
+                onSaved: (val) {
+                  note = val;
+                },
+                minLines: 1,
+                maxLines: 3,
+                maxLength: 200,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Note",
+                    prefixIcon: Icon(Icons.note)),
+              ),
+              //?======== add image ===============
+              TextButton(
+                onPressed: () {
+                  showBottomSheet(context);
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.pink,
+                  backgroundColor: Colors.pink,
+                  iconColor: Colors.pink,
                 ),
-                TextFormField(
-                  initialValue: widget.list['note'],
-                  validator: (val) {
-                    if (val!.length > 255) {
-                      return "Notes can't to be larger than 255 letter";
-                    }
-                    if (val.length < 10) {
-                      return "Notes can't to be less than 10 letter";
-                    }
-                    return null;
-                  },
-                  onSaved: (val) {
-                    note = val;
-                  },
-                  minLines: 1,
-                  maxLines: 3,
-                  maxLength: 200,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: "Note",
-                      prefixIcon: Icon(Icons.note)),
+                // textColor: Colors.white,
+                child: Text(
+                  "Edit Image For Note",
+                  style: TextStyle(color: Colors.amber),
                 ),
-                TextButton(
-                  onPressed: () {
-                    showBottomSheet(context);
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.pink,
-                    backgroundColor: Colors.pink,
-                    iconColor: Colors.pink,
-                  ),
-                  // textColor: Colors.white,
+              ),
+              //?======== edit btn ===============
+              TextButton(
+                onPressed: () async {
+                  await editNotes(context);
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.pink,
+                  backgroundColor: Colors.pink,
+                  iconColor: Colors.pink,
+                ),
+                // textColor: Colors.white,
+                // padding: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
                   child: Text(
-                    "Edit Image For Note",
-                    style: TextStyle(color: Colors.amber),
+                    "Edit Note",
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
-                TextButton(
-                  onPressed: () async {
-                    await editNotes(context);
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.pink,
-                    backgroundColor: Colors.pink,
-                    iconColor: Colors.pink,
-                  ),
-                  // textColor: Colors.white,
-                  // padding: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 100, vertical: 10),
-                    child: Text(
-                      "Edit Note",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                )
-              ]))
+              ),
+            ]),
+          ),
         ],
       )),
     );
@@ -174,6 +184,7 @@ class _EditNotesState extends State<EditNotes> {
                   "Edit Image",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
+                //? =============== from GALLARY ==================
                 InkWell(
                   onTap: () async {
                     var picked = await ImagePicker()
@@ -207,6 +218,8 @@ class _EditNotesState extends State<EditNotes> {
                         ],
                       )),
                 ),
+                 //? =============== from CAMERA ==================
+                //* may we need to give permissions or try different emulator ===
                 InkWell(
                   onTap: () async {
                     var picked = await ImagePicker()

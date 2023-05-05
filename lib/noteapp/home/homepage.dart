@@ -16,15 +16,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //
   CollectionReference notesref = FirebaseFirestore.instance.collection("notes");
-
+  //
   getUser() {
     var user = FirebaseAuth.instance.currentUser;
     print(user!.email);
   }
 
+  //
   var fbm = FirebaseMessaging.instance;
-
+  //
   initalMessage() async {
     var message = await FirebaseMessaging.instance.getInitialMessage();
 
@@ -33,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  //
   requestPermssion() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -45,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       provisional: false,
       sound: true,
     );
-
+    //
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
     } else if (settings.authorizationStatus ==
@@ -85,14 +88,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('HomePage'),
         actions: [
+          //? ============== signout from auth ===========================
           IconButton(
               icon: Icon(Icons.exit_to_app),
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
+                //* then nav into login
                 Navigator.of(context).pushReplacementNamed("login");
               })
         ],
       ),
+      //? ========== nav into add page ============================
       floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           child: Icon(Icons.add),
@@ -100,7 +106,9 @@ class _HomePageState extends State<HomePage> {
             Navigator.of(context).pushNamed("addnotes");
           }),
       body: Container(
+        //? ====== we use futurebuilder , try streamBuilder ===========
         child: FutureBuilder(
+            //! it get data from collection for certain id by using where====
             future: notesref
                 .where("userid",
                     isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -110,6 +118,7 @@ class _HomePageState extends State<HomePage> {
                 return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, i) {
+                      //? === Dismissible =======
                       return Dismissible(
                           onDismissed: (diretion) async {
                             await notesref
@@ -137,12 +146,14 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+//* widget
 class ListNotes extends StatelessWidget {
   final notes;
   final docid;
   ListNotes({this.notes, this.docid});
   @override
   Widget build(BuildContext context) {
+    //* when nav inro view => pass notes value
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -150,8 +161,10 @@ class ListNotes extends StatelessWidget {
         }));
       },
       child: Card(
+        //? image and title, content, icon ======================
         child: Row(
           children: [
+            //? ===== img =======
             Expanded(
               flex: 1,
               child: Image.network(
@@ -162,12 +175,14 @@ class ListNotes extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
+              //? ===== title then under it note =======
               child: ListTile(
                 title: Text("${notes['title']}"),
                 subtitle: Text(
                   "${notes['note']}",
                   style: TextStyle(fontSize: 14),
                 ),
+                //? ====== icon => edit => pass both docid && notes list ===
                 trailing: IconButton(
                   onPressed: () {
                     Navigator.of(context)

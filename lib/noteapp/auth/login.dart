@@ -12,16 +12,22 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  //* vars, why not use TEC
   var mypassword, myemail;
   GlobalKey<FormState> formstate = new GlobalKey<FormState>();
+
+  //* method
   signIn() async {
     var formdata = formstate.currentState;
     if (formdata!.validate()) {
-      formdata.save();
+      formdata.save(); //* save user state
       try {
+        //* loading
         showLoading(context);
+        //* sign in
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: myemail, password: mypassword);
+        //! don't forget return
         return userCredential;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
@@ -51,6 +57,7 @@ class _LoginState extends State<Login> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          //? ================ logo ======================================
           Center(child: Image.asset("assets/images/logo.png")),
           Container(
             padding: EdgeInsets.all(20),
@@ -58,6 +65,7 @@ class _LoginState extends State<Login> {
                 key: formstate,
                 child: Column(
                   children: [
+                    //? ================ email ======================================
                     TextFormField(
                       onSaved: (val) {
                         myemail = val;
@@ -78,6 +86,7 @@ class _LoginState extends State<Login> {
                               borderSide: BorderSide(width: 1))),
                     ),
                     SizedBox(height: 20),
+                    //? ================ password ======================================
                     TextFormField(
                       onSaved: (val) {
                         mypassword = val;
@@ -98,23 +107,26 @@ class _LoginState extends State<Login> {
                           border: OutlineInputBorder(
                               borderSide: BorderSide(width: 1))),
                     ),
+                    //? ================ toggle ======================================
                     Container(
-                        margin: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Text("if you havan't accout "),
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed("signup");
-                              },
-                              child: Text(
-                                "Click Here",
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            )
-                          ],
-                        )),
+                      margin: EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Text("if you havan't accout "),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed("signup");
+                            },
+                            child: Text(
+                              "Click Here",
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    //? ================ sign in btn ======================================
                     Container(
                         child: ElevatedButton(
                       // textColor: Colors.white,
@@ -124,7 +136,11 @@ class _LoginState extends State<Login> {
                         iconColor: Colors.pink,
                       ),
                       onPressed: () async {
+                        //* sign in ==================
                         var user = await signIn();
+                        //! no need save data t ofirestore
+                        //* we bring data of user by sign in
+                        //* if there data go to => homepage
                         if (user != null) {
                           Navigator.of(context)
                               .pushReplacementNamed("homepage");

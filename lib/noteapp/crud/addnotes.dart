@@ -18,16 +18,25 @@ class AddNotes extends StatefulWidget {
 }
 
 class _AddNotesState extends State<AddNotes> {
+  //* we need to add our data into collection inside FireStore
   CollectionReference notesref = FirebaseFirestore.instance.collection("notes");
 
+  //* Represents a reference to a Google Cloud Storage object.
+  //? Developers can upload, download, and delete objects,
+  //* as well as get/set object metadata.
   Reference? ref;
 
+  //* A File holds a [path] on which operations can be performed.
+  //? You can get the parent directory of the file using [parent],
+  //* a property inherited from [FileSystemEntity].
   File? file;
 
+  //* what we add them later
   var title, note, imageurl;
 
   GlobalKey<FormState> formstate = new GlobalKey<FormState>();
 
+  //* method
   addNotes(context) async {
     if (file == null)
       return AwesomeDialog(
@@ -36,18 +45,30 @@ class _AddNotesState extends State<AddNotes> {
           body: Text("please choose Image"),
           dialogType: DialogType.error)
         ..show();
+
+    //* cLL user state
     var formdata = formstate.currentState;
+    //*
     if (formdata!.validate()) {
+      //* loading
       showLoading(context);
+      //* save current state
       formdata.save();
+
+      //* upload inside your path this path
       await ref!.putFile(file!);
+      //* get path of url that uploaded
       imageurl = await ref!.getDownloadURL();
+
+      //* add data to certain fields with random doc id
       await notesref.add({
         "title": title,
         "note": note,
         "imageurl": imageurl,
+        //! we get user id from auth
         "userid": FirebaseAuth.instance.currentUser!.uid
       }).then((value) {
+        //* after end go to => homepage
         Navigator.of(context).pushNamed("homepage");
       }).catchError((e) {
         print("$e");
@@ -62,11 +83,12 @@ class _AddNotesState extends State<AddNotes> {
         title: Text('Add Note'),
       ),
       body: Container(
-          child: Column(
-        children: [
-          Form(
+        child: Column(
+          children: [
+            Form(
               key: formstate,
               child: Column(children: [
+                //? ========= title ===============
                 TextFormField(
                   validator: (val) {
                     if (val!.length > 30) {
@@ -77,6 +99,7 @@ class _AddNotesState extends State<AddNotes> {
                     }
                     return null;
                   },
+                  //? === save them =====
                   onSaved: (val) {
                     title = val;
                   },
@@ -87,6 +110,7 @@ class _AddNotesState extends State<AddNotes> {
                       labelText: "Title Note",
                       prefixIcon: Icon(Icons.note)),
                 ),
+                //? ========= notes ===============
                 TextFormField(
                   validator: (val) {
                     if (val!.length > 255) {
@@ -97,6 +121,7 @@ class _AddNotesState extends State<AddNotes> {
                     }
                     return null;
                   },
+                  //? === save them =====
                   onSaved: (val) {
                     note = val;
                   },
@@ -109,6 +134,7 @@ class _AddNotesState extends State<AddNotes> {
                       labelText: "Note",
                       prefixIcon: Icon(Icons.note)),
                 ),
+                //? ========= showBottomSheet => to add image ===============
                 TextButton(
                   onPressed: () {
                     showBottomSheet(context);
@@ -124,6 +150,7 @@ class _AddNotesState extends State<AddNotes> {
                     style: TextStyle(color: Colors.amber),
                   ),
                 ),
+                //?============= add btn ================
                 TextButton(
                   onPressed: () async {
                     await addNotes(context);
@@ -143,10 +170,12 @@ class _AddNotesState extends State<AddNotes> {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
-                )
-              ]))
-        ],
-      )),
+                ),
+              ]),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -164,19 +193,26 @@ class _AddNotesState extends State<AddNotes> {
                   "Please Choose Image",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
+                //? =============== from GALLARY ==================
                 InkWell(
                   onTap: () async {
+                    //! picked image ====================================
                     var picked = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
                     // .getImage(source: ImageSource.gallery);
                     if (picked != null) {
+                      //* ===== to get only image name => .path ===
                       file = File(picked.path);
+                      //* === add random number to its start
+                      //* to avoid repeataion on img name
                       var rand = Random().nextInt(100000);
+                      //* basename => need path lib ======
                       var imagename = "$rand" + basename(picked.path);
+                      //* we can use child to divide our path ====
                       ref = FirebaseStorage.instance
                           .ref("images")
                           .child("$imagename");
-
+                      //* after end close dialogr
                       Navigator.of(context).pop();
                     }
                   },
@@ -197,6 +233,8 @@ class _AddNotesState extends State<AddNotes> {
                         ],
                       )),
                 ),
+                //? =============== from CAMERA ==================
+                //* may we need to give permissions or try different emulator ===
                 InkWell(
                   onTap: () async {
                     var picked = await ImagePicker()

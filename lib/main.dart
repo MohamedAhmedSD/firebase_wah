@@ -70,10 +70,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //* ===== allow user enter to homepage if he already regester ====
-      // home: islogin == false ? Login() : HomePage(),
+      home: islogin == false ? Login() : HomePage(),
       //* test AddUser function with dump data
       // home: AddUser("mohamed", "sheikh", 22),
-      home: MyStorage(),
+      // home: MyStorage(),
 
       // home: Test(),
       theme: ThemeData(

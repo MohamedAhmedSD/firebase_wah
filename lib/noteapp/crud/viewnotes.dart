@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ViewNote extends StatefulWidget {
+  //* we should recive place of notes == to use its data ===================
   final notes;
   ViewNote({Key? key, this.notes}) : super(key: key);
 
@@ -18,13 +19,15 @@ class _ViewNoteState extends State<ViewNote> {
       body: Container(
         child: Column(
           children: [
+            //? ======= imageUrl , title , note
             Container(
-                child: Image.network(
-              "${widget.notes['imageurl']}",
-              width: double.infinity,
-              height: 300,
-              fit: BoxFit.fill,
-            )),
+              child: Image.network(
+                "${widget.notes['imageurl']}",
+                width: double.infinity,
+                height: 300,
+                fit: BoxFit.fill,
+              ),
+            ),
             Container(
                 margin: EdgeInsets.symmetric(vertical: 15),
                 child: Text(
