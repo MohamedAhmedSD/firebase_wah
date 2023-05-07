@@ -24,8 +24,10 @@ class _HomePageState extends State<HomePage> {
     print(user!.email);
   }
 
-  //
+  //! use FBCM ===================================================
+  //* we need it to get device token when init this page
   var fbm = FirebaseMessaging.instance;
+
   //
   initalMessage() async {
     var message = await FirebaseMessaging.instance.getInitialMessage();
@@ -58,20 +60,33 @@ class _HomePageState extends State<HomePage> {
       print('User declined or has not accepted permission');
     }
   }
+  //!=========================================================================
 
   @override
   void initState() {
     requestPermssion();
     initalMessage();
+    //* get device token =====================================================
     fbm.getToken().then((token) {
       print("=================== Token ==================");
       print(token);
       print("====================================");
     });
 
+    //! ======= should be under init => or get error with unser non abstract class
+    //* how we useful from reach message on foreground ==> by make an event our method
+    //? notification have title && body ===
+
     FirebaseMessaging.onMessage.listen((event) {
       print(
           "===================== data Notification ==============================");
+      // print("${event.notification!.title}");
+      // print("${event.notification!.body}");
+      //! event have alot of probrties ===========
+      // print("${event.data}");
+      // print("${event.sentTime}");
+      // print("${event.senderId}");
+      // print("${event.messageId}");
 
       //  AwesomeDialog(context: context , title: "title" , body: Text("${event.notification.body}"))..show() ;
 
