@@ -24,11 +24,16 @@ class _HomePageState extends State<HomePage> {
     print(user!.email);
   }
 
-  //! use FBCM ===================================================
+  //! use FBCM === [ test purpuse ]============================================
   //* we need it to get device token when init this page
   var fbm = FirebaseMessaging.instance;
 
-  //
+  //? ==== we need know what used when app close and what used if it on background mode
+  //* ====================[getInitialMessage]==============================
+  // If the application has been opened from a terminated state
+  // via a [RemoteMessage] (containing a [Notification]),
+  // it will be returned, otherwise it will be null.
+
   initalMessage() async {
     var message = await FirebaseMessaging.instance.getInitialMessage();
 
@@ -37,7 +42,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  //
+  //* ============== we need it if we use IOS ========================
   requestPermssion() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -77,6 +82,11 @@ class _HomePageState extends State<HomePage> {
     //* how we useful from reach message on foreground ==> by make an event our method
     //? notification have title && body ===
 
+    //* ====================[onMessage]==============================
+    //? Stream<RemoteMessage> get onMessage
+    //! Returns a Stream that is called when an incoming FCM payload is
+    //* received whilst the Flutter instance is in the foreground.
+
     FirebaseMessaging.onMessage.listen((event) {
       print(
           "===================== data Notification ==============================");
@@ -92,6 +102,13 @@ class _HomePageState extends State<HomePage> {
 
       Navigator.of(context).pushNamed("addnotes");
     });
+
+    //* ====================[onMessageOpenedApp]==============================
+    //? Returns a [Stream] that is called when a user presses a notification message displayed via FCM.
+    //* A Stream event will be sent if the app has opened from a background state (not terminated).
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   Navigator.of(context).pushNamed("addnotes");
+    // });
 
     getUser();
     super.initState();

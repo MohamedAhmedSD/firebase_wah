@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wah_firebase/firebase_options.dart';
-import 'package:wah_firebase/storage/mystorage.dart';
 
 import 'noteapp/auth/login.dart';
 import 'noteapp/auth/signup.dart';
@@ -32,7 +31,17 @@ import 'noteapp/testtwo.dart';
 bool? islogin;
 
 //* RemoteMessage => A class representing a message sent from Firebase Cloud Messaging.
+//* ====================[onBackgroundMessage]==============================
+//! [1] first way ==========================================================
+//? void onBackgroundMessage(Future<void> Function(RemoteMessage) handler)
+//! Set a message handler function which is called when the app is in the background or terminated.
+//? async =>  async =>  async =>  async =>  async =>  async =>
+// FirebaseMessaging.onBackgroundMessage((message) async {
+//   print("===== Background Notification ==============================");
+//   print("${message.notification!.body}");
+// });
 
+//! [2] second way
 Future backgroudMessage(RemoteMessage message) async {
   print("=================== BackGroud Message ========================");
 
@@ -49,7 +58,7 @@ Future<void> main() async {
       // options: DefaultFirebaseOptions.currentPlatform,
       options: DefaultFirebaseOptions.android);
 
-  //? ========= call RemoteMessage =============
+  //? ========= call onBackgroundMessage =============
   FirebaseMessaging.onBackgroundMessage(backgroudMessage);
 
   //? ======== get the CURRENTUSER by AUTH =======

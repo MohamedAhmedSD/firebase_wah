@@ -16,3 +16,8 @@
             - what benefit from that??
                     - by using onMessage method => you can create certain event
 
+#########################################################
+[FG] foreground , [BG] background, [T] terminate
+onMessage => only [FG]
+onBackgroundMessage => reach for 3 levels, but can see only when [BG] or [T] 
+getInitialMessage()
