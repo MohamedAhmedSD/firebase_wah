@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //
+  //* reach to notes collection
   CollectionReference notesref = FirebaseFirestore.instance.collection("notes");
   //
   getUser() {
@@ -109,36 +109,65 @@ class _HomePageState extends State<HomePage> {
         //? ====== we use futurebuilder , try streamBuilder ===========
         child: FutureBuilder(
             //! it get data from collection for certain id by using where====
+            //* both must equal userid that saved on notes with that we get from
+            //* our current user
             future: notesref
                 .where("userid",
                     isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                .get(),
+                .get(), //* get()  == back future ============================
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                //* print(" has data");
+
                 return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, i) {
                       //? === Dismissible =======
+                      //* ==== Delete ====================================
+                      //* delete when drag right or left
                       return Dismissible(
-                          onDismissed: (diretion) async {
-                            await notesref
-                                .doc(snapshot.data!.docs[i].id)
-                                .delete();
-                            await FirebaseStorage.instance
-                                .refFromURL(snapshot.data!.docs[i]['imageurl'])
-                                .delete()
-                                .then((value) {
-                              print("=================================");
-                              print("Delete");
-                            });
-                          },
-                          key: UniqueKey(),
-                          child: ListNotes(
-                            notes: snapshot.data!.docs[i],
-                            docid: snapshot.data!.docs[i].id,
-                          ));
+                        onDismissed: (diretion) async {
+                          //* =============== [A] delete from FBFB ===========
+                          //? ====== [1] delete doc ======================
+                          await notesref
+                              .doc(snapshot.data!.docs[i].id)
+                              .delete();
+                          //* ====== [2] delete image from FBFS ===========
+                          await FirebaseStorage.instance
+                              //! Reference refFromURL(String url)
+                              //* url of img
+                              .refFromURL(snapshot.data!.docs[i]['imageurl'])
+                              .delete()
+                              .then((value) {
+                            print("=================================");
+                            print("Delete");
+                          });
+                        },
+                        //! ====== use key => must be uniqe == no way to repeat
+                        //*======== [B] delete from UI ===================
+                        key: UniqueKey(),
+                        child: ListNotes(
+                          notes: snapshot.data!.docs[i],
+                          docid: snapshot.data!.docs[i].id,
+                        ),
+                      );
                     });
+
+                //! ======= old =========
+                // return ListView.builder(
+                //     itemCount: snapshot.data!.docs.length,
+                //     itemBuilder: (context, i) {
+                //       // return Text("${snapshot.data!.docs[i].data()}");
+                //       //! ==== the method [] cann't be unconditionally ...
+                //       if (snapshot.data != null) {
+                //         return Text(
+                //             "${snapshot.data!.docs[i].data()["title"]}");
+                //       }
+                //       //! to avoid error when waiting data
+                //       return Center(child: CircularProgressIndicator());
+                //     });
               }
+              //! to avoid error when waiting data
               return Center(child: CircularProgressIndicator());
             }),
       ),
@@ -146,16 +175,18 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-//* widget
+//* widget ====================================================================
 class ListNotes extends StatelessWidget {
-  final notes;
-  final docid;
+  //! we get its values later as =>
+  final notes; //* == snapshot.data!.docs[i],
+  final docid; //* snapshot.data!.docs[i].id,
   ListNotes({this.notes, this.docid});
   @override
   Widget build(BuildContext context) {
     //* when nav inro view => pass notes value
     return InkWell(
       onTap: () {
+        //* ========================= nav to view ============================
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return ViewNote(notes: notes);
         }));
@@ -168,6 +199,7 @@ class ListNotes extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Image.network(
+                //? === notes == snapshot.data!.docs[i],
                 "${notes['imageurl']}",
                 fit: BoxFit.fill,
                 height: 80,
@@ -177,6 +209,7 @@ class ListNotes extends StatelessWidget {
               flex: 3,
               //? ===== title then under it note =======
               child: ListTile(
+                //? === notes == snapshot.data!.docs[i],
                 title: Text("${notes['title']}"),
                 subtitle: Text(
                   "${notes['note']}",

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ViewNote extends StatefulWidget {
-  //* we should recive place of notes == to use its data ===================
-  final notes;
+  //* we should recive data ===================
+  final notes; //* == snapshot.data!.docs[i],
+
   ViewNote({Key? key, this.notes}) : super(key: key);
 
   @override

@@ -38,6 +38,7 @@ class _AddNotesState extends State<AddNotes> {
 
   //* method
   addNotes(context) async {
+    //! by using if force user upload image to save its notes =========
     if (file == null)
       return AwesomeDialog(
           context: context,
@@ -45,7 +46,7 @@ class _AddNotesState extends State<AddNotes> {
           body: Text("please choose Image"),
           dialogType: DialogType.error)
         ..show();
-
+    //! ================================================================
     //* cLL user state
     var formdata = formstate.currentState;
     //*
@@ -54,19 +55,21 @@ class _AddNotesState extends State<AddNotes> {
       showLoading(context);
       //* save current state
       formdata.save();
-
+      //! ============= add image only if there are notes ====================
       //* upload inside your path this path
       await ref!.putFile(file!);
       //* get path of url that uploaded
       imageurl = await ref!.getDownloadURL();
-
+      //!=======================================================================
       //* add data to certain fields with random doc id
       await notesref.add({
         "title": title,
         "note": note,
         "imageurl": imageurl,
-        //! we get user id from auth
+        //? === how we know is this note for certain user ======= add uid field
+        //! ============== we get user id from auth============================
         "userid": FirebaseAuth.instance.currentUser!.uid
+        //* ==========handle error by => then && catchError =============
       }).then((value) {
         //* after end go to => homepage
         Navigator.of(context).pushNamed("homepage");
@@ -179,6 +182,9 @@ class _AddNotesState extends State<AddNotes> {
     );
   }
 
+  //! ======== the argument type "Context" can't be assigned to parameter ....
+  // showBottomSheet() {
+  //* add context to method parameter ===================================
   showBottomSheet(context) {
     return showModalBottomSheet(
         context: context,
@@ -212,8 +218,11 @@ class _AddNotesState extends State<AddNotes> {
                       ref = FirebaseStorage.instance
                           .ref("images")
                           .child("$imagename");
-                      //* after end close dialogr
+                      //! after end close dialog === if not dialog not disappear
                       Navigator.of(context).pop();
+                      //* we see that=> we not upload image from here
+                      //? but from addNote method ??
+                      //* to ensude no image add without writen notes first
                     }
                   },
                   child: Container(
@@ -247,7 +256,11 @@ class _AddNotesState extends State<AddNotes> {
                       ref = FirebaseStorage.instance
                           .ref("images")
                           .child("$imagename");
+                      //! after end close dialog === if not dialog not disappear
                       Navigator.of(context).pop();
+                      //* we see that=> we not upload image from here
+                      //? but from addNote method ??
+                      //* to ensude no image add without writen notes first
                     }
                   },
                   child: Container(

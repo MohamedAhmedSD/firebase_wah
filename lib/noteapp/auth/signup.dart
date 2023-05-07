@@ -37,7 +37,9 @@ class _SignUpState extends State<SignUp> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           //! ====== why I use Nav ==============
+          //! == close loading =========
           Navigator.of(context).pop();
+          //! then open ================
           AwesomeDialog(
               context: context,
               title: "Error",
@@ -45,7 +47,9 @@ class _SignUpState extends State<SignUp> {
             ..show();
         } else if (e.code == 'email-already-in-use') {
           //! ====== why I use Nav ==============
+          //! == close loading =========
           Navigator.of(context).pop();
+          //! then open ================
           AwesomeDialog(
               context: context,
               title: "Error",
@@ -96,67 +100,9 @@ class _SignUpState extends State<SignUp> {
                                 borderSide: BorderSide(width: 1))),
                       ),
                       SizedBox(height: 20),
-                      TextFormField(
-                        onSaved: (val) {
-                          myemail = val;
-                        },
-                        validator: (val) {
-                          if (val!.length > 100) {
-                            return "Email can't to be larger than 100 letter";
-                          }
-                          if (val.length < 2) {
-                            return "Email can't to be less than 2 letter";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            hintText: "email",
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1))),
-                      ),
+
                       SizedBox(height: 20),
-                      TextFormField(
-                        onSaved: (val) {
-                          mypassword = val;
-                        },
-                        validator: (val) {
-                          if (val!.length > 100) {
-                            return "Password can't to be larger than 100 letter";
-                          }
-                          if (val.length < 4) {
-                            return "Password can't to be less than 4 letter";
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            hintText: "password",
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1))),
-                      ),
-                      //? ======= username ======================
-                      TextFormField(
-                        onSaved: (val) {
-                          myusername = val;
-                        },
-                        validator: (val) {
-                          if (val!.length > 100) {
-                            return "username can't to be larger than 100 letter";
-                          }
-                          if (val.length < 2) {
-                            return "username can't to be less than 2 letter";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            hintText: "username",
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1))),
-                      ),
-                      SizedBox(height: 20),
+
                       //? ======= email ======================
                       TextFormField(
                         onSaved: (val) {
@@ -226,17 +172,20 @@ class _SignUpState extends State<SignUp> {
                           iconColor: Colors.pink,
                         ),
                         // textColor: Colors.white,
+                        //? ============ add user ==============================
                         onPressed: () async {
-                          //* sign up => create new user
+                          //* sign up => create new user ========================
                           UserCredential response = await signUp();
                           print("===================");
                           // if (response != null) {
                           if (response != null) {
-                            //* save user data inside collection
+                            //* save user data inside collection we make =======
+                            //! don't save password on it for security =========
                             await FirebaseFirestore.instance
                                 .collection("users")
                                 .add(
                                     {"username": myusername, "email": myemail});
+                            //? its better delete collection on FBFS ===========
                             //* after save data go to => homepage
                             Navigator.of(context)
                                 .pushReplacementNamed("homepage");

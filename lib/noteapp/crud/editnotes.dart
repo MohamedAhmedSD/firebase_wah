@@ -10,8 +10,8 @@ import '../component/alert.dart';
 
 class EditNotes extends StatefulWidget {
   //* it need both
-  final docid;
-  final list;
+  final docid; //! to deal with certain note id
+  final list; //! use this list to pass all valueof notes, used as initial value inside TFF
   EditNotes({Key? key, this.docid, this.list}) : super(key: key);
 
   @override
@@ -32,33 +32,49 @@ class _EditNotesState extends State<EditNotes> {
   editNotes(context) async {
     var formdata = formstate.currentState;
 
+    //* user already add image on add page
+    //* here we care about is he edit image or not
+    //* [1] file == null == not edit image
+    //! just update title, notes => no need to upload image =======
     if (file == null) {
       if (formdata!.validate()) {
         showLoading(context);
         formdata.save();
+
         //! we need access certain doc id
         //? then update its data
         //* may use set rather than update
         await notesref.doc(widget.docid).update({
           "title": title,
           "note": note,
+          //! we not update uid ==========================================
+          //* ==========handle error by => then && catchError =============
         }).then((value) {
           Navigator.of(context).pushNamed("homepage");
         }).catchError((e) {
           print("$e");
         });
       }
-    } else {
+    }
+    //* [2] else == file != null == edit image
+    else {
       //! if null add new one by using => doc.update
       if (formdata!.validate()) {
         showLoading(context);
         formdata.save();
+
+        //! update title, notes => upload image
+        //* upload imagepart
         await ref!.putFile(file!);
         imageurl = await ref!.getDownloadURL();
+
+        //* update all data
         await notesref.doc(widget.docid).update({
           "title": title,
           "note": note,
           "imageurl": imageurl,
+          //! we not update uid ==========================================
+          //* ==========handle error by => then && catchError =============
         }).then((value) {
           Navigator.of(context).pushNamed("homepage");
         }).catchError((e) {
@@ -82,6 +98,8 @@ class _EditNotesState extends State<EditNotes> {
             child: Column(children: [
               //?======== title ===============
               TextFormField(
+                //! ================== use list as initial value ==============
+                //? ========= so we can display data notes here ==============
                 initialValue: widget.list['title'],
                 validator: (val) {
                   if (val!.length > 30) {
@@ -104,6 +122,8 @@ class _EditNotesState extends State<EditNotes> {
               ),
               //?======== note ===============
               TextFormField(
+                //! ================== use list as initial value ==============
+                //? ========= so we can display data notes here ==============
                 initialValue: widget.list['note'],
                 validator: (val) {
                   if (val!.length > 255) {
@@ -218,7 +238,7 @@ class _EditNotesState extends State<EditNotes> {
                         ],
                       )),
                 ),
-                 //? =============== from CAMERA ==================
+                //? =============== from CAMERA ==================
                 //* may we need to give permissions or try different emulator ===
                 InkWell(
                   onTap: () async {

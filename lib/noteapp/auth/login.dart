@@ -31,14 +31,18 @@ class _LoginState extends State<Login> {
         return userCredential;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
+          //! == close loading =========
           Navigator.of(context).pop();
+          //! then open ================
           AwesomeDialog(
               context: context,
               title: "Error",
               body: Text("No user found for that email"))
             ..show();
         } else if (e.code == 'wrong-password') {
+          //! == close loading =========
           Navigator.of(context).pop();
+          //! then open ================
           AwesomeDialog(
               context: context,
               title: "Error",

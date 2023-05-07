@@ -11,3 +11,49 @@ showLoading(context) {
         );
       });
 }
+
+/*
+ * Future<T?> showDialog<T>({
+  required BuildContext context,
+  required Widget Function(BuildContext) builder,
+  bool barrierDismissible = true,
+  Color? barrierColor = Colors.black54,
+  String? barrierLabel,
+  bool useSafeArea = true,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+  Offset? anchorPoint,
+}) 
+ */
+
+/*
+  * (new) AlertDialog AlertDialog({
+  Key? key,
+  Widget? icon,
+  EdgeInsetsGeometry? iconPadding,
+  Color? iconColor,
+  Widget? title,
+  EdgeInsetsGeometry? titlePadding,
+  TextStyle? titleTextStyle,
+  Widget? content,
+  EdgeInsetsGeometry? contentPadding,
+  TextStyle? contentTextStyle,
+  List<Widget>? actions,
+  EdgeInsetsGeometry? actionsPadding,
+  MainAxisAlignment? actionsAlignment,
+  OverflowBarAlignment? actionsOverflowAlignment,
+  VerticalDirection? actionsOverflowDirection,
+  double? actionsOverflowButtonSpacing,
+  EdgeInsetsGeometry? buttonPadding,
+  Color? backgroundColor,
+  double? elevation,
+  Color? shadowColor,
+  Color? surfaceTintColor,
+  String? semanticLabel,
+  EdgeInsets insetPadding = _defaultInsetPadding,
+  Clip clipBehavior = Clip.none,
+  ShapeBorder? shape,
+  AlignmentGeometry? alignment,
+  bool scrollable = false,
+})
+ */
