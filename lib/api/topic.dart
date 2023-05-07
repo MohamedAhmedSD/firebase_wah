@@ -1,3 +1,11 @@
+//* to use tolin for all devices
+//? we use our get token method then save token on FBFS to use it on FCM
+//* we need update token with every new user
+
+//! how we see [FG] notification on open app
+//* by using local notification with FCM
+
+//?======================================================================
 //* may use dart, python, php .....
 
 import 'dart:convert';
@@ -6,13 +14,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Api extends StatefulWidget {
-  Api({Key? key}) : super(key: key);
+class Topics extends StatefulWidget {
+  Topics({Key? key}) : super(key: key);
   @override
-  _ApiState createState() => _ApiState();
+  _TopicsState createState() => _TopicsState();
 }
 
-class _ApiState extends State<Api> {
+class _TopicsState extends State<Topics> {
   //! we get server key from => FB consol => project settings =>
   //* cloud messaging => server key
   var serverToken = "";
@@ -34,15 +42,17 @@ class _ApiState extends State<Api> {
           'data': <String, dynamic>{
             //?========= here where we pass data parameters ===========
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            //?----- no need to all this params ===================
             'id': id.toString(),
-            //?-----
             'name': 'btoo',
             'lastname': 'ahmed'
           },
           //! send to ==================================
           //* Returns the default FCM token for this device.
-
-          'to': await FirebaseMessaging.instance.getToken()
+          // 'to': await FirebaseMessaging.instance.getToken()
+          // 'to': "certain token"
+          //?= we reach topic through send notify brn ============
+          'to': '/topics/weather'
         },
       ),
     );
@@ -71,11 +81,27 @@ class _ApiState extends State<Api> {
       appBar: AppBar(
         title: Text('Test Two'),
       ),
-      body: MaterialButton(
-        onPressed: () async {
-          await sendNotify("title", 'body', '1');
-        },
-        child: Text("send notify"),
+      body: Column(
+        children: [
+          MaterialButton(
+            onPressed: () async {
+              await sendNotify("title", 'body', '1');
+            },
+            child: Text("send notify"),
+          ), //! is better call them on init not as btn
+          MaterialButton(
+            onPressed: () async {
+              await FirebaseMessaging.instance.subscribeToTopic('weather');
+            },
+            child: Text("send notify"),
+          ),
+          MaterialButton(
+            onPressed: () async {
+              await FirebaseMessaging.instance.unsubscribeFromTopic('weather');
+            },
+            child: Text("send notify"),
+          ),
+        ],
       ),
     );
   }
